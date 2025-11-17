@@ -1,39 +1,61 @@
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-n', '--packet_name', type=str)
-parser.add_argument('-u', '--url_link_repo', type=str)
-parser.add_argument('-m', '--repo_work_mode', type=str)
-parser.add_argument('-v', '--packet_version', type=str)
-parser.add_argument('-o', '--output_file', type=str)
 
-args = parser.parse_args()
+def main():
+    # Создаем парсер аргументов командной строки
+    parser = argparse.ArgumentParser(description="Параметры для работы с пакетами")
 
-print("Arguments: \n")
-print(f"packet_name = {args.packet_name}")
-print(f"url_link_repo = {args.url_link_repo}")
-print(f"repo_work_mode = {args.repo_work_mode}")
-print(f"packet_version = {args.packet_version}")
-print(f"output_file = {args.output_file}")
+    # Добавляем аргументы
+    parser.add_argument('-n', '--package_name', required=True, type=str,
+                        help='Название пакета')
+    parser.add_argument('-u', '--repository_url', required=True, type=str,
+                        help='URL репозитория')
+    parser.add_argument('-m', '--repository_mode', required=True, type=str,
+                        help='Режим репозитория')
+    parser.add_argument('-v', '--package_version', required=True, type=str,
+                        help='Версия пакета')
+    parser.add_argument('-o', '--output_file', required=True, type=str,
+                        help='Выходной файл')
 
-if args.packet_name == None:
-    print("no packet name")
-    exit()
+    # Получаем аргументы
+    params = parser.parse_args()
 
-if args.url_link_repo == None:
-    print("no repo link")
-    exit()
+    # Выводим полученные значения
+    print("Полученные аргументы:")
+    print(f"  Пакет: {params.package_name}")
+    print(f"  Репозиторий: {params.repository_url}")
+    print(f"  Режим: {params.repository_mode}")
+    print(f"  Версия: {params.package_version}")
+    print(f"  Выходной файл: {params.output_file}")
+    print()
 
-if args.repo_work_mode == None:
-    print("no repo work mode")
-    exit()
+    # Проверяем корректность значений
+    errors = []
 
-if args.packet_version == None:
-    print("no packet version")
-    exit()
+    if not params.package_name.strip():
+        errors.append("Название пакета не может быть пустым")
 
-if args.output_file == None:
-    print("no output file")
-    exit()
+    if not params.repository_url.strip():
+        errors.append("URL репозитория не может быть пустым")
 
-print("all parameters are valid")
+    if not params.repository_mode.strip():
+        errors.append("Режим репозитория не может быть пустым")
+
+    if not params.package_version.strip():
+        errors.append("Версия пакета не может быть пустой")
+
+    if not params.output_file.strip():
+        errors.append("Выходной файл не может быть пустым")
+
+    # Выводим ошибки или подтверждение
+    if errors:
+        print("Обнаружены ошибки:")
+        for error in errors:
+            print(f"  - {error}")
+        exit(1)
+    else:
+        print("Все параметры корректны!")
+
+
+if __name__ == "__main__":
+    main()
